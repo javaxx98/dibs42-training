@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIBS42 — Code of Conduct Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', system-ui, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const e = React.createElement;
+const { useState, useEffect, useRef } = React;
+
+const SECTIONS = [
+  { title: "Our Core Principles", content: "DIBS42 is built on four principles that guide everything we do:\n\n**Respect** \u2014 Treat others with professionalism and consideration.\n**Responsibility** \u2014 Own your work, your commitments, and your impact.\n**Collaboration** \u2014 Support each other, share knowledge, work toward shared goals.\n**Growth** \u2014 Continuously learn, improve, and invest in your development.\n\nThese aren\u2019t just words on a page \u2014 they show up in our 360\u00B0 feedback culture, our development plans, and how we interact every day." },
+  { title: "Workplace Behavior & Inclusion", content: "DIBS42 does not tolerate discrimination, harassment, bullying, or any conduct that creates a hostile work environment. Retaliation against anyone who reports concerns is strictly prohibited.\n\nWe are committed to equal opportunity regardless of gender, age, ethnicity, nationality, religion, disability, sexual orientation, or any other protected characteristic.\n\nWhen conflicts arise, address them directly and respectfully. If that\u2019s not possible, the HR team is available for guidance, mediation, and support." },
+  { title: "Data Protection & Confidentiality", content: "DIBS42 operates under GDPR and Serbian data protection laws. You are also bound by your NDA.\n\n**Key rules:**\n\u2022 Protect company, client, and project data at all times\n\u2022 Store sensitive files only on approved platforms (Microsoft 365, company drives)\n\u2022 Never transfer work files to personal devices or unapproved cloud storage\n\u2022 Lock your screen when stepping away; use strong passwords with MFA\n\u2022 Report suspected data breaches to HR immediately \u2014 GDPR requires notification within 72 hours" },
+  { title: "Anti-Bribery & Professional Integrity", content: "DIBS42 has a zero-tolerance policy toward bribery and corruption. You must never offer, promise, give, request, or accept a bribe in any form.\n\nThis applies to all dealings \u2014 public officials, clients, suppliers, and third parties. We comply with the Dutch Anti-Bribery Act and Serbian anti-corruption laws.\n\n**Gifts & Hospitality:** Minor gifts (e.g., a business lunch) are acceptable if reasonable and transparent. Cash gifts are never acceptable. When in doubt, consult HR before accepting or offering.\n\n**Conflicts of Interest:** Disclose potential conflicts to HR. Never use your position for personal financial gain." },
+  { title: "Intellectual Property", content: "All work product created during your employment belongs to DIBS42. This includes software code, BIM models, technical designs, architectural drawings, project documentation, and reports.\n\nThis obligation continues after your employment ends. If you have pre-existing IP you plan to use at work, disclose it to HR when you join.\n\nRespect others\u2019 IP too \u2014 no pirated software, no unauthorized reproduction of copyrighted materials, and always verify license terms before incorporating third-party assets." },
+  { title: "Health, Safety & Site Work", content: "Your health and safety are a priority. Private medical insurance is provided as part of your package.\n\n**On construction/client sites:**\n\u2022 Comply with all site-specific safety rules\n\u2022 Wear required PPE at all times\n\u2022 Complete safety briefings before beginning work\n\u2022 Report safety concerns to the site manager and HR\n\n**Substance use:** You must not be under the influence of alcohol or drugs during working hours or on any site. Responsible consumption at company events is expected." },
+  { title: "Environmental & Supplier Conduct", content: "DIBS42 is committed to minimizing environmental impact. In the office, be mindful of energy use, reduce printing, and recycle. On projects, follow environmental regulations and promote sustainable practices.\n\nWe also expect our suppliers and subcontractors to operate ethically. If you become aware of a vendor engaging in bribery, unsafe conditions, data mishandling, or environmental violations, report it to HR. DIBS42 reserves the right to terminate non-compliant vendor relationships." },
+  { title: "Reporting & Whistleblower Protection", content: "If something doesn\u2019t feel right, speak up. You can report through:\n\u2022 The HR team (in person, email, or scheduled meeting)\n\u2022 The anonymous reporting channel (details provided during onboarding)\n\u2022 Your direct manager\n\n**Retaliation is strictly prohibited.** This includes dismissal, demotion, exclusion, or any adverse treatment against anyone who reports in good faith.\n\nAll reports are investigated promptly, fairly, and with discretion. Both the reporter and the subject of the report will be treated with respect." },
+];
+
+const QUESTIONS = [
+  { id:1, scenario:"You notice an unsafe condition in your work environment \u2014 for example, exposed cables in the office, a blocked fire exit, or a colleague ignoring safety rules during a site visit. They shrug it off and say it\u2019s not a big deal. What should you do?", options:["Ignore it \u2014 it\u2019s not your responsibility","Flag it immediately to your manager or the HR team, and to the site manager if on a client site","Wait and see if someone else reports it first","Fix it yourself and move on without telling anyone"], correct:1, explanation:"All employees are responsible for reporting unsafe conditions, hazards, or near-miss incidents immediately \u2014 whether in the office, working remotely, or visiting a client site. Don\u2019t assume someone else will handle it.", section:"Health, Safety & Site Work" },
+  { id:2, scenario:"A client\u2019s project manager offers you a \u20AC500 gift card as a thank-you after a successful project delivery. What should you do?", options:["Accept it \u2014 you earned it","Accept it but don\u2019t tell anyone","Decline it and report the offer to HR","Accept it and share it with your team"], correct:2, explanation:"Cash and cash equivalents are never acceptable. Even well-intentioned gifts that could influence professional judgment must be declined. Always consult HR when in doubt.", section:"Anti-Bribery & Professional Integrity" },
+  { id:3, scenario:"You accidentally send a file containing client financial data to your personal email so you can work on it over the weekend. What should you do?", options:["Delete it from your personal email after you\u2019re done","It\u2019s fine \u2014 you signed an NDA so the data is protected","Report it to HR immediately as a potential data breach","Forward it to your work email and pretend it didn\u2019t happen"], correct:2, explanation:"Transferring work files to personal devices or unapproved platforms is a data protection violation. Under GDPR, even accidental breaches must be reported to HR immediately \u2014 the 72-hour reporting window applies.", section:"Data Protection & Confidentiality" },
+  { id:4, scenario:"During a team meeting, a colleague repeatedly makes jokes that target another team member\u2019s nationality. The targeted person laughs it off but seems uncomfortable. What should you do?", options:["It\u2019s just banter \u2014 no need to intervene","Laugh along to keep the mood light","Speak up in the moment or privately, and report to HR if it continues","Wait for the targeted person to complain first"], correct:2, explanation:"DIBS42 does not tolerate conduct that creates a hostile or offensive environment, regardless of whether the targeted person formally complains. Everyone has a responsibility to speak up.", section:"Workplace Behavior & Inclusion" },
+  { id:5, scenario:"You built a useful automation script during work hours using company resources. You\u2019d like to publish it on your personal GitHub as open source. Can you?", options:["Yes \u2014 you wrote the code, so it\u2019s yours","Yes, as long as you remove any client references","No \u2014 all work product created during employment belongs to DIBS42; you need written approval first","Yes, but only after you leave the company"], correct:2, explanation:"All work product created using company time and resources is DIBS42\u2019s intellectual property. Sharing it externally requires prior written approval, even if the code seems generic.", section:"Intellectual Property" },
+  { id:6, scenario:"You discover that a third-party vendor DIBS42 works with has been mishandling personal data from one of your shared projects \u2014 storing it on unsecured servers and sharing it without authorization. What should you do?", options:["It\u2019s the vendor\u2019s problem, not yours","Mention it at the next project review meeting","Report your concerns to the HR team immediately","Ignore it \u2014 they\u2019re not a DIBS42 employee"], correct:2, explanation:"DIBS42 expects suppliers and business partners to meet our standards around data protection, ethical conduct, and safety. Violations should be reported to HR immediately. DIBS42 reserves the right to terminate non-compliant vendor relationships.", section:"Environmental & Supplier Conduct" },
+  { id:7, scenario:"You witness a senior colleague behaving inappropriately toward a junior team member. You\u2019re worried that reporting it could affect your own career. What should you do?", options:["Stay out of it \u2014 it\u2019s not your business","Confront the senior colleague publicly in the next meeting","Use the anonymous reporting channel or report to HR \u2014 retaliation is strictly prohibited","Wait and see if the junior team member reports it themselves"], correct:2, explanation:"DIBS42 provides an anonymous reporting channel for exactly these situations. Retaliation \u2014 including dismissal, demotion, or exclusion \u2014 is strictly prohibited against anyone who reports in good faith.", section:"Reporting & Whistleblower Protection" },
+  { id:8, scenario:"You\u2019re freelancing on weekends for a company that provides similar IT and construction services to DIBS42\u2019s clients. Is this acceptable?", options:["Yes \u2014 what you do on your own time is your business","Yes, as long as it doesn\u2019t affect your energy levels at work","No \u2014 outside work that competes with DIBS42\u2019s services or creates a conflict of interest must be disclosed to HR","Only if you don\u2019t use any DIBS42 tools or knowledge"], correct:2, explanation:"Outside employment is permitted, but not if it competes with DIBS42 or creates a conflict of interest. This type of arrangement must be disclosed to and discussed with the HR team.", section:"Anti-Bribery & Professional Integrity" },
+  { id:9, scenario:"You receive a suspicious email that looks like it\u2019s from Microsoft asking you to reset your password via a link. What should you do?", options:["Click the link \u2014 it\u2019s probably legitimate","Forward it to your colleagues to warn them","Do not click the link, report it to HR immediately","Delete it and forget about it"], correct:2, explanation:"Phishing emails should never be clicked or forwarded. Report suspicious emails to HR immediately so they can investigate and alert the team through proper channels.", section:"Data Protection & Confidentiality" },
+  { id:10, scenario:"You want to use a new AI tool to speed up your workflow. The tool requires uploading project files to a cloud platform. What should you do?", options:["Use it \u2014 efficiency is a core value","Use it but only with non-sensitive files","Consult the HR team or your project lead before using it to ensure it meets data protection requirements","Ask a colleague if they\u2019ve used it before"], correct:2, explanation:"AI tools must comply with data protection and confidentiality requirements. Never upload client-sensitive or proprietary data to unapproved platforms. Always check with HR or your project lead first.", section:"Data Protection & Confidentiality" },
+];
+
+const PASS_THRESHOLD = 0.8;
+var font = "'Roboto', system-ui, sans-serif";
+const navy = "#0f1b2d";
+const accent = "#768c6e";
+const accentLight = "#f0f4ef";
+const green = "#059669";
+const red = "#dc2626";
+const g100 = "#f8fafc";
+const g200 = "#e2e8f0";
+const g500 = "#64748b";
+const g800 = "#1e293b";
+
+const wrap = { fontFamily:font, maxWidth:720, margin:"0 auto", color:g800, padding:"0 16px" };
+const cardS = { background:"#fff", border:"1px solid "+g200, borderRadius:12, padding:"28px 32px", marginBottom:20 };
+function btnS(p){ return { padding:"12px 28px", borderRadius:8, border:p?"none":"1px solid "+g200, background:p?accent:"#fff", color:p?"#fff":g800, fontSize:15, fontWeight:600, fontFamily:font, cursor:"pointer", transition:"all 0.15s" }; }
+
+function renderMd(text){
+  return text.split("\n").map(function(line,i){
+    if(line.trim()==="") return e("div",{key:i,style:{height:12}});
+    var html = line.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\u2022 /g,'<span style="margin-right:6px">\u2022</span>');
+    return e("p",{key:i,style:{margin:"0 0 6px",lineHeight:1.65},dangerouslySetInnerHTML:{__html:html}});
+  });
+}
+
+function ProgressBar(props){
+  return e("div",{style:{background:g200,borderRadius:100,height:6,marginBottom:28}},
+    e("div",{style:{background:accent,borderRadius:100,height:6,width:((props.current+1)/props.total*100)+"%",transition:"width 0.4s ease"}})
+  );
+}
+
+function Tag(props){
+  return e("span",{style:{display:"inline-block",fontSize:11,fontWeight:700,letterSpacing:"0.05em",textTransform:"uppercase",color:props.color,background:props.color+"15",padding:"4px 10px",borderRadius:6}},props.text);
+}
+
+function App(){
+  var s = useState("intro"); var phase=s[0]; var setPhase=s[1];
+  var s2 = useState(0); var curSec=s2[0]; var setCurSec=s2[1];
+  var s3 = useState(0); var curQ=s3[0]; var setCurQ=s3[1];
+  var s4 = useState({}); var answers=s4[0]; var setAnswers=s4[1];
+  var s5 = useState(null); var selOpt=s5[0]; var setSelOpt=s5[1];
+  var s6 = useState(false); var showExp=s6[0]; var setShowExp=s6[1];
+  var s7 = useState(""); var name=s7[0]; var setName=s7[1];
+  var topRef = useRef(null);
+
+  useEffect(function(){ if(topRef.current) topRef.current.scrollIntoView({behavior:"smooth"}); },[phase,curSec,curQ]);
+
+  var score = Object.values(answers).filter(function(a){return a.correct}).length;
+  var passed = score/QUESTIONS.length >= PASS_THRESHOLD;
+  var pct = Math.round(score/QUESTIONS.length*100);
+
+  // INTRO
+  if(phase==="intro"){
+    return e("div",{style:Object.assign({},wrap,{paddingTop:48,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{textAlign:"center",marginBottom:40}},
+        e("div",{style:{fontSize:13,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:accent,marginBottom:12}},"DIBS42"),
+        e("h1",{style:{fontSize:32,fontWeight:800,color:navy,margin:"0 0 12px",lineHeight:1.2}},"Code of Conduct Training"),
+        e("p",{style:{fontSize:16,color:g500,maxWidth:480,margin:"0 auto",lineHeight:1.6}},"This training covers the key topics in our Code of Conduct. After reviewing the material, you\u2019ll complete a 10-question assessment.")
+      ),
+      e("div",{style:cardS},
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:24}},
+          [["8 topics","Key policy areas"],["10 questions","Scenario-based"],["80% to pass","8 out of 10 correct"],["~15 minutes","Estimated time"]].map(function(item,i){
+            return e("div",{key:i,style:{background:g100,borderRadius:8,padding:"14px 16px"}},
+              e("div",{style:{fontSize:16,fontWeight:700,color:navy}},item[0]),
+              e("div",{style:{fontSize:13,color:g500}},item[1])
+            );
+          })
+        ),
+        e("div",{style:{marginBottom:20}},
+          e("label",{style:{fontSize:13,fontWeight:600,color:g500,display:"block",marginBottom:6}},"Your full name"),
+          e("input",{type:"text",value:name,onChange:function(ev){setName(ev.target.value)},placeholder:"e.g. Petar Petrovi\u0107",style:{width:"100%",padding:"10px 14px",borderRadius:8,border:"1px solid "+g200,fontSize:15,fontFamily:font,boxSizing:"border-box",outline:"none"}})
+        ),
+        e("button",{style:Object.assign({},btnS(true),{width:"100%",opacity:name.trim()?1:0.5}),disabled:!name.trim(),onClick:function(){setPhase("training")}},"Begin training \u2192")
+      )
+    );
+  }
+
+  // TRAINING
+  if(phase==="training"){
+    var sec = SECTIONS[curSec];
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
+        e("div",{style:{fontSize:12,fontWeight:600,color:g500,textTransform:"uppercase",letterSpacing:"0.08em"}},"Training \u2014 Section "+(curSec+1)+" of "+SECTIONS.length),
+        e("button",{style:Object.assign({},btnS(false),{padding:"6px 14px",fontSize:13}),onClick:function(){setPhase("quiz");setCurQ(0);}},"Skip to quiz \u2192")
+      ),
+      e(ProgressBar,{current:curSec,total:SECTIONS.length}),
+      e("div",{style:cardS},
+        e("h2",{style:{fontSize:22,fontWeight:800,color:navy,margin:"0 0 20px"}},sec.title),
+        e("div",{style:{fontSize:15,lineHeight:1.7,color:g800}},renderMd(sec.content))
+      ),
+      e("div",{style:{display:"flex",justifyContent:"space-between",gap:12}},
+        e("button",{style:Object.assign({},btnS(false),{opacity:curSec===0?0.4:1}),disabled:curSec===0,onClick:function(){setCurSec(function(s){return s-1});}},"\u2190 Previous"),
+        e("button",{style:btnS(true),onClick:function(){if(curSec<SECTIONS.length-1)setCurSec(function(s){return s+1});else{setPhase("quiz");setCurQ(0);}}},curSec<SECTIONS.length-1?"Next topic \u2192":"Start assessment \u2192")
+      )
+    );
+  }
+
+  // QUIZ
+  if(phase==="quiz"){
+    var q = QUESTIONS[curQ];
+    var answered = answers[q.id]!==undefined;
+    var isCorrect = answered && answers[q.id].correct;
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{fontSize:12,fontWeight:600,color:g500,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}},"Assessment \u2014 Question "+(curQ+1)+" of "+QUESTIONS.length),
+      e(ProgressBar,{current:curQ,total:QUESTIONS.length}),
+      e("div",{style:cardS},
+        e("div",{style:{marginBottom:16}},e(Tag,{text:q.section,color:accent})),
+        e("p",{style:{fontSize:16,fontWeight:600,color:navy,lineHeight:1.55,margin:"0 0 24px"}},q.scenario),
+        e("div",{style:{display:"flex",flexDirection:"column",gap:10}},
+          q.options.map(function(opt,i){
+            var border=g200,bg="#fff",tc=g800,fw=400;
+            if(showExp){
+              if(i===q.correct){border=green;bg=green+"0d";tc=green;fw=600;}
+              else if(i===selOpt&&i!==q.correct){border=red;bg=red+"0d";tc=red;fw=600;}
+            } else if(selOpt===i){border=accent;bg=accentLight;fw=500;}
+            return e("button",{key:i,disabled:showExp,onClick:function(){setSelOpt(i);},style:{display:"flex",alignItems:"flex-start",gap:12,padding:"14px 16px",borderRadius:10,border:"1.5px solid "+border,background:bg,cursor:showExp?"default":"pointer",textAlign:"left",fontFamily:font,fontSize:14,lineHeight:1.55,color:tc,fontWeight:fw,transition:"all 0.15s"}},
+              e("span",{style:{minWidth:26,height:26,borderRadius:26,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,background:selOpt===i&&!showExp?accent:showExp&&i===q.correct?green:showExp&&i===selOpt?red:g100,color:(selOpt===i&&!showExp)||(showExp&&(i===q.correct||i===selOpt))?"#fff":g500,border:"1px solid "+(selOpt===i&&!showExp?accent:showExp&&i===q.correct?green:showExp&&i===selOpt?red:g200)}},String.fromCharCode(65+i)),
+              e("span",{style:{paddingTop:2}},opt)
+            );
+          })
+        ),
+        showExp?e("div",{style:{marginTop:20,padding:"16px 18px",borderRadius:10,background:isCorrect?green+"0a":red+"0a",border:"1px solid "+(isCorrect?green+"30":red+"30")}},
+          e("div",{style:{fontSize:14,fontWeight:700,color:isCorrect?green:red,marginBottom:6}},isCorrect?"\u2713 Correct":"\u2717 Incorrect"),
+          e("p",{style:{fontSize:14,color:g800,margin:0,lineHeight:1.6}},q.explanation)
+        ):null
+      ),
+      e("div",{style:{display:"flex",justifyContent:"flex-end",gap:12}},
+        !showExp?
+          e("button",{style:Object.assign({},btnS(true),{opacity:selOpt===null?0.5:1}),disabled:selOpt===null,onClick:function(){setAnswers(function(a){var n=Object.assign({},a);n[q.id]={selected:selOpt,correct:selOpt===q.correct};return n;});setShowExp(true);}},"Submit answer"):
+          e("button",{style:btnS(true),onClick:function(){setSelOpt(null);setShowExp(false);if(curQ<QUESTIONS.length-1)setCurQ(function(c){return c+1});else setPhase("results");}},curQ<QUESTIONS.length-1?"Next question \u2192":"View results \u2192")
+      )
+    );
+  }
+
+  // RESULTS
+  if(phase==="results"){
+    var today = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:Object.assign({},cardS,{textAlign:"center",background:passed?"#f0fdf4":"#fef2f2",border:"1px solid "+(passed?"#bbf7d0":"#fecaca")})},
+        e("div",{style:{fontSize:56,marginBottom:8}},passed?"\u2713":"\u2717"),
+        e("h2",{style:{fontSize:26,fontWeight:800,color:passed?green:red,margin:"0 0 8px"}},passed?"Training Complete":"Not Passed"),
+        e("p",{style:{fontSize:16,color:g500,margin:"0 0 20px"}},"You scored "+score+" out of "+QUESTIONS.length+" ("+pct+"%). "+(passed?"You meet the 80% pass threshold.":"You need 80% to pass. Please review the material and try again.")),
+        e("div",{style:{display:"inline-flex",gap:24,background:"#fff",borderRadius:10,padding:"14px 28px",border:"1px solid "+g200}},
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Score"),e("div",{style:{fontSize:20,fontWeight:700,color:navy}},pct+"%")),
+          e("div",{style:{width:1,background:g200}}),
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Correct"),e("div",{style:{fontSize:20,fontWeight:700,color:navy}},score+"/"+QUESTIONS.length)),
+          e("div",{style:{width:1,background:g200}}),
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Status"),e("div",{style:{fontSize:20,fontWeight:700,color:passed?green:red}},passed?"Passed":"Failed"))
+        )
+      ),
+      !passed?e("div",{style:{textAlign:"center",marginBottom:20}},
+        e("p",{style:{fontSize:14,color:g500,marginBottom:12}},"Review the topics you missed:"),
+        e("div",{style:{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center"}},
+          QUESTIONS.filter(function(q){return answers[q.id]&&!answers[q.id].correct}).map(function(q){
+            return e("span",{key:q.id,style:{fontSize:13,padding:"6px 12px",borderRadius:6,background:red+"10",color:red,fontWeight:600}},q.section);
+          })
+        )
+      ):null,
+      e("div",{style:{marginBottom:24}},
+        e("h3",{style:{fontSize:16,fontWeight:700,color:navy,marginBottom:14}},"Answer review"),
+        QUESTIONS.map(function(q,i){
+          var a=answers[q.id];var correct=a&&a.correct;
+          return e("div",{key:q.id,style:{display:"flex",gap:12,padding:"12px 16px",borderRadius:8,marginBottom:6,background:correct?green+"08":red+"08",border:"1px solid "+(correct?green+"20":red+"20"),alignItems:"flex-start"}},
+            e("span",{style:{minWidth:24,height:24,borderRadius:24,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,background:correct?green:red,color:"#fff"}},correct?"\u2713":"\u2717"),
+            e("div",{style:{flex:1}},
+              e("div",{style:{fontSize:13,fontWeight:600,color:navy,marginBottom:2}},"Q"+(i+1)+". "+q.scenario.slice(0,80)+"..."),
+              e("div",{style:{fontSize:12,color:g500}},correct?"Correct":"Your answer: "+String.fromCharCode(65+a.selected)+" \u2014 Correct: "+String.fromCharCode(65+q.correct))
+            )
+          );
+        })
+      ),
+      passed?e("div",{style:Object.assign({},cardS,{textAlign:"center",border:"2px solid "+navy,background:"#fff",padding:"40px 32px"})},
+        e("div",{style:{fontSize:11,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:accent,marginBottom:16}},"Certificate of completion"),
+        e("h2",{style:{fontSize:24,fontWeight:800,color:navy,margin:"0 0 4px"}},"DIBS42 Code of Conduct Training"),
+        e("p",{style:{fontSize:14,color:g500,margin:"0 0 24px"}},"This certifies that"),
+        e("p",{style:{fontSize:22,fontWeight:700,color:navy,margin:"0 0 4px",fontStyle:"italic"}},name),
+        e("p",{style:{fontSize:14,color:g500,margin:"0 0 24px"}},"has successfully completed the annual Code of Conduct training assessment on "+today+", achieving a score of "+pct+"%."),
+        e("div",{style:{width:60,height:1,background:g200,margin:"0 auto 16px"}}),
+        e("p",{style:{fontSize:12,color:g500,margin:0}},"This record should be filed with the HR team.")
+      ):null,
+      passed?e("div",{style:{display:"flex",justifyContent:"center",gap:12,marginTop:16}},
+        e("button",{style:Object.assign({},btnS(true),{background:navy}),onClick:function(){
+          var subject = encodeURIComponent("Code of Conduct Training Complete \u2014 " + name);
+          var body = encodeURIComponent("CODE OF CONDUCT TRAINING RESULTS\n\nEmployee: " + name + "\nDate: " + today + "\nScore: " + score + "/" + QUESTIONS.length + " (" + pct + "%)\nStatus: PASSED\n\nDetailed Results:\n" + QUESTIONS.map(function(q,i){ var a=answers[q.id]; return "Q" + (i+1) + ". " + q.section + " \u2014 " + (a&&a.correct?"Correct":"Incorrect (answered "+String.fromCharCode(65+a.selected)+", correct "+String.fromCharCode(65+q.correct)+")"); }).join("\n") + "\n\nThis employee has successfully completed the annual Code of Conduct training assessment as required under Section 20 of the DIBS42 Code of Conduct.\n\nPlease file this record accordingly.");
+          window.open("mailto:hr@dibs42.com?subject=" + subject + "&body=" + body);
+        }},"\u2709 Send results to HR")
+      ):null,
+      !passed?e("div",{style:{display:"flex",justifyContent:"center",gap:12,marginTop:8}},
+        e("button",{style:btnS(true),onClick:function(){setPhase("training");setCurSec(0);setCurQ(0);setAnswers({});setSelOpt(null);setShowExp(false);}},"\u2190 Retake training")
+      ):null
+    );
+  }
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+</script>
+</body>
+</html>

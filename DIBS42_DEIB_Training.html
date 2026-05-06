@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIBS42 — Anti-Discrimination & DEIB Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', system-ui, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+var e = React.createElement;
+var useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+
+var SECTIONS = [
+  { title: "Purpose & Scope", content: "This policy establishes DIBS42\u2019s commitment to a workplace free from discrimination, harassment, and unequal treatment. It applies to both DIBS42 DOO (Serbia) and DIBS42 BV (Netherlands).\n\n**Who is covered:**\nAll employees (full-time, part-time, fixed-term, indefinite), interns, trainees, temporary workers, contractors, freelancers, board members, job applicants, and any third parties interacting with DIBS42 professionally.\n\n**Legal framework:**\nThis policy complies with Serbian anti-discrimination laws (including the Law on Prohibition of Discrimination and the Law on Prevention of Harassment at Work) and Dutch equal treatment legislation (including the AWGB and related acts). Where the policy sets a higher standard than local law, the policy standard applies." },
+  { title: "Protected Characteristics", content: "DIBS42 prohibits discrimination on a wide range of grounds, covering the combined requirements of both Serbian and Dutch law.\n\nThese include: race, skin color, ethnic origin, national origin, sex, gender, gender identity and expression, sexual orientation, age, disability and chronic illness, religion or belief, political opinion, marital or family status, pregnancy and parental status, social origin, financial status, language, trade union membership, working hours (full-time vs. part-time), and type of employment contract.\n\nThis list is non-exhaustive. DIBS42 will not discriminate on any ground prohibited by applicable law or inconsistent with the principles of this policy." },
+  { title: "DEIB Commitment", content: "DIBS42 has identified six priority areas for its Diversity, Equity, Inclusion, and Belonging efforts:\n\n**Gender equity** \u2014 Gender-neutral recruitment language, equal pay monitoring, equal access to leadership and development opportunities.\n\n**Disability inclusion** \u2014 Reasonable accommodations (accessible workstations, assistive tech, modified schedules), accessibility reviews, voluntary and confidential disability disclosure.\n\n**LGBTQ+ protections** \u2014 Use of preferred names and pronouns, equal application of benefits and leave, zero tolerance for outing without consent.\n\n**Ethnic & national minority inclusion** \u2014 Bias-free employment decisions, multilingual respect (Serbian, Dutch, English), cultural and religious holiday accommodation.\n\n**Age diversity** \u2014 No age-based assumptions in hiring, promotion, or training. Cross-generational mentoring encouraged.\n\n**Religious accommodation** \u2014 Reasonable accommodation for prayer, dietary needs, religious dress, and holy days." },
+  { title: "Prohibited Conduct", content: "The following conduct is strictly prohibited:\n\n**Direct discrimination** \u2014 Treating someone less favorably because of a protected characteristic (e.g., refusing to promote someone based on gender or age).\n\n**Indirect discrimination** \u2014 Applying a seemingly neutral rule that disproportionately disadvantages people with a protected characteristic, unless objectively justified.\n\n**Harassment** \u2014 Unwanted conduct related to a protected characteristic that violates dignity or creates a hostile environment. This includes verbal abuse, offensive jokes, intimidation, exclusion, and mobbing.\n\n**Sexual harassment** \u2014 Unwelcome sexual advances, requests for sexual favors, or any sexual conduct that interferes with work or creates a hostile environment.\n\n**Victimization & retaliation** \u2014 Any adverse action against someone for reporting discrimination, giving evidence, or exercising their rights under this policy.\n\n**Instruction to discriminate** \u2014 Instructing or pressuring someone else to discriminate is itself a violation." },
+  { title: "Rights & Responsibilities", content: "**All employees** must treat colleagues, clients, and partners with dignity and respect, comply with this policy, report violations, and cooperate in investigations.\n\n**Managers & team leads** carry additional duties: model inclusive behavior, watch for signs of discrimination or exclusion, ensure team awareness of this policy, facilitate reasonable accommodations, and escalate concerns to HR promptly.\n\n**HR** administers the policy, serves as the primary contact for complaints, conducts investigations, maintains confidential records, delivers training, and monitors legal compliance.\n\n**CEO** provides visible leadership, ensures resources for implementation, approves disciplinary measures for serious violations, and reviews annual policy updates." },
+  { title: "Reporting & Complaints", content: "**How to report:** Contact HR in writing (email) or verbally (in person or by phone). Reports can be made by the affected person or any witness. Anonymous reports are accepted.\n\n**Timeline:** Report as soon as practicable. There is no internal deadline, but be aware of legal limitation periods (Serbia: 6 months for harassment mediation; Netherlands: no formal deadline for human rights complaints, but civil claims have statutory limits).\n\n**Informal resolution:** Before or instead of a formal complaint, you may seek a facilitated conversation through HR. This is voluntary and does not prevent formal complaints later.\n\n**Jurisdiction-specific:** Serbian complaints follow the Law on Prevention of Harassment at Work (including mediation within 8 days). Dutch complaints follow the Arbowet and may involve an external confidential advisor." },
+  { title: "Investigation Process", content: "All complaints are treated seriously, promptly, and confidentially.\n\n**Steps:** HR acknowledges receipt within 3 business days. A preliminary assessment determines if the complaint falls under this policy. Both parties are interviewed, evidence and witnesses gathered. The investigation targets completion within 30 calendar days. HR prepares findings and recommendations. The CEO reviews and decides on measures. Both parties are informed in writing.\n\n**Interim measures** may be taken during investigation (temporary reassignment, adjusted reporting lines, workspace separation). These are precautionary, not a finding of guilt.\n\n**Appeals:** Either party may appeal within 15 calendar days. Appeals go to the CEO and are reviewed by an impartial person not previously involved.\n\n**External remedies:** Nothing in this policy prevents you from filing with the Serbian Commissioner for Equality, the Dutch Institute for Human Rights, labour inspectorates, or courts." },
+  { title: "Consequences & Support", content: "**Disciplinary measures** for violations include written warnings, mandatory training, reassignment, suspension, or termination \u2014 proportionate to severity.\n\n**Legal consequences:** In Serbia, discrimination may lead to civil damages, misdemeanor proceedings, or criminal liability. In the Netherlands, serious misconduct may result in summary dismissal.\n\n**False accusations:** Knowingly false or malicious complaints are themselves a policy violation. Good-faith complaints that are not substantiated are never treated as false accusations.\n\n**Internal support:** HR, your manager, and the HR SharePoint (policy, forms, training materials).\n\n**External support (Serbia):** Commissioner for Equality, Labour Inspectorate, Ombudsman.\n**External support (Netherlands):** Institute for Human Rights, Labour Inspectorate, Discriminatie.nl." },
+];
+
+var QUESTIONS = [
+  { id:1, scenario:"During a team standup, a colleague consistently interrupts and talks over a female team member, dismissing her technical suggestions while praising similar ideas when raised by male colleagues. What should you do?", options:["It\u2019s just a personality clash \u2014 not a policy issue","Speak up in the meeting or privately, and report the pattern to HR if it continues","Wait for the female colleague to raise it herself","Tell the colleague to be nicer, but don\u2019t involve HR"], correct:1, explanation:"A persistent pattern of dismissing contributions based on gender constitutes direct discrimination and can create a hostile environment. Everyone has a responsibility to speak up, and repeated behaviour should be reported to HR.", section:"Prohibited Conduct" },
+  { id:2, scenario:"Your team schedules all important meetings on Fridays. A colleague who works a 4-day week (Monday\u2013Thursday) due to a disability accommodation is consistently excluded from key decisions. Is this a problem?", options:["No \u2014 the meetings are open to everyone who\u2019s in the office","Yes \u2014 this is indirect discrimination; an apparently neutral practice disproportionately disadvantages someone with a protected characteristic","It\u2019s the colleague\u2019s problem for not working Fridays","Only if it was done intentionally"], correct:1, explanation:"Indirect discrimination occurs when a seemingly neutral practice (Friday meetings) puts a person with a protected characteristic at a disadvantage. Intent doesn\u2019t matter \u2014 the effect does. Meetings should be scheduled inclusively.", section:"Protected Characteristics" },
+  { id:3, scenario:"A new employee asks HR to update their name in internal systems to reflect their preferred name, which differs from their legal name. How should this be handled?", options:["Refuse \u2014 only legal names can be used in company systems","Ask the employee to provide a legal name change document first","Update the systems as requested \u2014 employees may use their preferred name and pronouns","Tell them it\u2019s not possible for IT reasons"], correct:2, explanation:"DIBS42\u2019s DEIB policy explicitly states that employees may use their preferred name and pronouns, and that internal systems will be updated upon request. No legal documentation is required for this.", section:"DEIB Commitment" },
+  { id:4, scenario:"You overhear a manager telling another manager that they shouldn\u2019t hire a particular candidate because \u201Cshe\u2019ll probably go on maternity leave soon.\u201D What should you do?", options:["It\u2019s a reasonable business concern \u2014 not discrimination","Mind your own business \u2014 hiring decisions aren\u2019t your responsibility","Report it to HR \u2014 this is direct discrimination based on pregnancy/parental status","Mention it casually to the candidate so they know"], correct:2, explanation:"Pregnancy and parental status are protected characteristics. Making employment decisions based on the possibility of maternity leave is direct discrimination. As a witness, you have a responsibility to report this to HR.", section:"Prohibited Conduct" },
+  { id:5, scenario:"An employee confides in you that they are gay but has not shared this at work. Later, a colleague asks you if you know anything about that employee\u2019s personal life. What should you do?", options:["Tell them what you know \u2014 it\u2019s not a big deal","Share it only with people you trust","Say nothing \u2014 outing someone\u2019s sexual orientation without their explicit consent is prohibited","Suggest they ask the employee directly"], correct:2, explanation:"DIBS42\u2019s policy explicitly prohibits outing an employee\u2019s sexual orientation or gender identity without their explicit consent. This applies regardless of the context or how casually the information is requested.", section:"DEIB Commitment" },
+  { id:6, scenario:"After filing a harassment complaint, an employee notices they are no longer invited to team lunches and their manager has become noticeably cold toward them. What is happening and what should they do?", options:["It\u2019s probably a coincidence \u2014 just ignore it","This may be retaliation, which is strictly prohibited \u2014 report it to HR immediately","They should have thought about that before filing the complaint","Confront the manager directly before involving HR"], correct:1, explanation:"Exclusion, coldness, or any adverse treatment following a good-faith complaint constitutes retaliation or victimization. This is strictly prohibited \u2014 including dismissal, demotion, exclusion, or any other adverse treatment. It should be reported to HR immediately.", section:"Prohibited Conduct" },
+  { id:7, scenario:"You\u2019re a team lead and notice that an older colleague is consistently excluded from training opportunities for new software tools. When you ask, you\u2019re told \u201Che probably wouldn\u2019t get it anyway.\u201D What should you do?", options:["Accept the explanation \u2014 some people are less tech-savvy","Ensure the colleague is included and report the age-based assumption to HR","Offer to teach the colleague yourself instead of involving HR","Ask the colleague if they even want the training first"], correct:1, explanation:"Age is a protected characteristic. Excluding someone from professional development based on assumptions about age-related capabilities is direct discrimination. As a manager, you have an additional duty to address this and escalate to HR.", section:"Rights & Responsibilities" },
+  { id:8, scenario:"During a project celebration, a colleague repeatedly makes unwelcome comments about another employee\u2019s appearance, touching their shoulder despite being asked to stop. This happens outside the office at a team dinner. Does the policy apply?", options:["No \u2014 the policy only covers the workplace","No \u2014 it was just friendly behaviour at a social event","Yes \u2014 the policy applies to all professional settings including company events, and this constitutes sexual harassment","Only if the employee formally objects in writing"], correct:2, explanation:"The policy covers all work environments, including company events. Unwelcome physical contact and comments about appearance, especially after being asked to stop, constitute sexual harassment regardless of the setting.", section:"Prohibited Conduct" },
+  { id:9, scenario:"An employee requests to take time off for a religious holiday that is not on the standard company calendar. Their manager says no because \u201Cit\u2019s not a real holiday here.\u201D Is this correct?", options:["Yes \u2014 the company only observes official public holidays","No \u2014 reasonable accommodation for religious observance should be provided","It depends on how many people in the office share that religion","The employee should use their annual leave instead"], correct:1, explanation:"DIBS42\u2019s policy commits to reasonable accommodation for religious holidays, dietary needs, dress, and prayer. Dismissing a religious holiday as not \u201Creal\u201D is inconsistent with the policy and potentially discriminatory. The request should be accommodated where practicable.", section:"DEIB Commitment" },
+  { id:10, scenario:"HR receives a discrimination complaint but the investigation finds the complaint was not substantiated. The accused now wants the complainant to face disciplinary action for making a \u201Cfalse accusation.\u201D Should HR comply?", options:["Yes \u2014 if the complaint wasn\u2019t proven, it was false","No \u2014 a good-faith complaint that is not substantiated is not a false accusation; only knowingly false or malicious complaints are policy violations","It depends on how the accused feels about it","HR should issue a warning to both parties to be fair"], correct:1, explanation:"The policy is clear: a complaint made in good faith that is ultimately not substantiated is never treated as a false accusation. Only knowingly false or malicious complaints constitute a policy violation. Protecting good-faith reporters is essential to maintaining trust in the system.", section:"Consequences & Support" },
+];
+
+var PASS_THRESHOLD = 0.8;
+var font = "'Roboto', system-ui, sans-serif";
+var navy = "#0f1b2d";
+var accent = "#768c6e";
+var accentLight = "#f0f4ef";
+var green = "#059669";
+var red = "#dc2626";
+var g100 = "#f8fafc";
+var g200 = "#e2e8f0";
+var g500 = "#64748b";
+var g800 = "#1e293b";
+
+var wrap = { fontFamily:font, maxWidth:720, margin:"0 auto", color:g800, padding:"0 16px" };
+var cardS = { background:"#fff", border:"1px solid "+g200, borderRadius:12, padding:"28px 32px", marginBottom:20 };
+function btnS(p){ return { padding:"12px 28px", borderRadius:8, border:p?"none":"1px solid "+g200, background:p?accent:"#fff", color:p?"#fff":g800, fontSize:15, fontWeight:600, fontFamily:font, cursor:"pointer", transition:"all 0.15s" }; }
+
+function renderMd(text){
+  return text.split("\n").map(function(line,i){
+    if(line.trim()==="") return e("div",{key:i,style:{height:12}});
+    var html = line.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\u2022 /g,'<span style="margin-right:6px">\u2022</span>');
+    return e("p",{key:i,style:{margin:"0 0 6px",lineHeight:1.65},dangerouslySetInnerHTML:{__html:html}});
+  });
+}
+
+function ProgressBar(props){
+  return e("div",{style:{background:g200,borderRadius:100,height:6,marginBottom:28}},
+    e("div",{style:{background:accent,borderRadius:100,height:6,width:((props.current+1)/props.total*100)+"%",transition:"width 0.4s ease"}})
+  );
+}
+
+function Tag(props){
+  return e("span",{style:{display:"inline-block",fontSize:11,fontWeight:700,letterSpacing:"0.05em",textTransform:"uppercase",color:props.color,background:props.color+"15",padding:"4px 10px",borderRadius:6}},props.text);
+}
+
+function App(){
+  var s=useState("intro"),phase=s[0],setPhase=s[1];
+  var s2=useState(0),curSec=s2[0],setCurSec=s2[1];
+  var s3=useState(0),curQ=s3[0],setCurQ=s3[1];
+  var s4=useState({}),answers=s4[0],setAnswers=s4[1];
+  var s5=useState(null),selOpt=s5[0],setSelOpt=s5[1];
+  var s6=useState(false),showExp=s6[0],setShowExp=s6[1];
+  var s7=useState(""),name=s7[0],setName=s7[1];
+  var topRef=useRef(null);
+
+  useEffect(function(){ if(topRef.current) topRef.current.scrollIntoView({behavior:"smooth"}); },[phase,curSec,curQ]);
+
+  var score=Object.values(answers).filter(function(a){return a.correct}).length;
+  var passed=score/QUESTIONS.length>=PASS_THRESHOLD;
+  var pct=Math.round(score/QUESTIONS.length*100);
+
+  if(phase==="intro"){
+    return e("div",{style:Object.assign({},wrap,{paddingTop:48,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{textAlign:"center",marginBottom:40}},
+        e("div",{style:{fontSize:13,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:accent,marginBottom:12}},"DIBS42"),
+        e("h1",{style:{fontSize:30,fontWeight:800,color:navy,margin:"0 0 12px",lineHeight:1.2}},"Anti-Discrimination & DEIB Training"),
+        e("p",{style:{fontSize:16,color:g500,maxWidth:500,margin:"0 auto",lineHeight:1.6}},"This training covers our Anti-Discrimination, Equal Opportunity & DEIB Policy. After reviewing the material, you\u2019ll complete a 10-question assessment.")
+      ),
+      e("div",{style:cardS},
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:24}},
+          [["8 topics","Key policy areas"],["10 questions","Scenario-based"],["80% to pass","8 out of 10 correct"],["~15 minutes","Estimated time"]].map(function(item,i){
+            return e("div",{key:i,style:{background:g100,borderRadius:8,padding:"14px 16px"}},
+              e("div",{style:{fontSize:16,fontWeight:700,color:navy}},item[0]),
+              e("div",{style:{fontSize:13,color:g500}},item[1])
+            );
+          })
+        ),
+        e("div",{style:{marginBottom:20}},
+          e("label",{style:{fontSize:13,fontWeight:600,color:g500,display:"block",marginBottom:6}},"Your full name"),
+          e("input",{type:"text",value:name,onChange:function(ev){setName(ev.target.value)},placeholder:"e.g. Petar Petrovi\u0107",style:{width:"100%",padding:"10px 14px",borderRadius:8,border:"1px solid "+g200,fontSize:15,fontFamily:font,boxSizing:"border-box",outline:"none"}})
+        ),
+        e("button",{style:Object.assign({},btnS(true),{width:"100%",opacity:name.trim()?1:0.5}),disabled:!name.trim(),onClick:function(){setPhase("training")}},"Begin training \u2192")
+      )
+    );
+  }
+
+  if(phase==="training"){
+    var sec=SECTIONS[curSec];
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
+        e("div",{style:{fontSize:12,fontWeight:600,color:g500,textTransform:"uppercase",letterSpacing:"0.08em"}},"Training \u2014 Section "+(curSec+1)+" of "+SECTIONS.length),
+        e("button",{style:Object.assign({},btnS(false),{padding:"6px 14px",fontSize:13}),onClick:function(){setPhase("quiz");setCurQ(0);}},"Skip to quiz \u2192")
+      ),
+      e(ProgressBar,{current:curSec,total:SECTIONS.length}),
+      e("div",{style:cardS},
+        e("h2",{style:{fontSize:22,fontWeight:800,color:navy,margin:"0 0 20px"}},sec.title),
+        e("div",{style:{fontSize:15,lineHeight:1.7,color:g800}},renderMd(sec.content))
+      ),
+      e("div",{style:{display:"flex",justifyContent:"space-between",gap:12}},
+        e("button",{style:Object.assign({},btnS(false),{opacity:curSec===0?0.4:1}),disabled:curSec===0,onClick:function(){setCurSec(function(s){return s-1});}},"\u2190 Previous"),
+        e("button",{style:btnS(true),onClick:function(){if(curSec<SECTIONS.length-1)setCurSec(function(s){return s+1});else{setPhase("quiz");setCurQ(0);}}},curSec<SECTIONS.length-1?"Next topic \u2192":"Start assessment \u2192")
+      )
+    );
+  }
+
+  if(phase==="quiz"){
+    var q=QUESTIONS[curQ];
+    var answered=answers[q.id]!==undefined;
+    var isCorrect=answered&&answers[q.id].correct;
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:{fontSize:12,fontWeight:600,color:g500,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}},"Assessment \u2014 Question "+(curQ+1)+" of "+QUESTIONS.length),
+      e(ProgressBar,{current:curQ,total:QUESTIONS.length}),
+      e("div",{style:cardS},
+        e("div",{style:{marginBottom:16}},e(Tag,{text:q.section,color:accent})),
+        e("p",{style:{fontSize:16,fontWeight:600,color:navy,lineHeight:1.55,margin:"0 0 24px"}},q.scenario),
+        e("div",{style:{display:"flex",flexDirection:"column",gap:10}},
+          q.options.map(function(opt,i){
+            var border=g200,bg="#fff",tc=g800,fw=400;
+            if(showExp){
+              if(i===q.correct){border=green;bg=green+"0d";tc=green;fw=600;}
+              else if(i===selOpt&&i!==q.correct){border=red;bg=red+"0d";tc=red;fw=600;}
+            } else if(selOpt===i){border=accent;bg=accentLight;fw=500;}
+            return e("button",{key:i,disabled:showExp,onClick:function(){setSelOpt(i);},style:{display:"flex",alignItems:"flex-start",gap:12,padding:"14px 16px",borderRadius:10,border:"1.5px solid "+border,background:bg,cursor:showExp?"default":"pointer",textAlign:"left",fontFamily:font,fontSize:14,lineHeight:1.55,color:tc,fontWeight:fw,transition:"all 0.15s"}},
+              e("span",{style:{minWidth:26,height:26,borderRadius:26,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,background:selOpt===i&&!showExp?accent:showExp&&i===q.correct?green:showExp&&i===selOpt?red:g100,color:(selOpt===i&&!showExp)||(showExp&&(i===q.correct||i===selOpt))?"#fff":g500,border:"1px solid "+(selOpt===i&&!showExp?accent:showExp&&i===q.correct?green:showExp&&i===selOpt?red:g200)}},String.fromCharCode(65+i)),
+              e("span",{style:{paddingTop:2}},opt)
+            );
+          })
+        ),
+        showExp?e("div",{style:{marginTop:20,padding:"16px 18px",borderRadius:10,background:isCorrect?green+"0a":red+"0a",border:"1px solid "+(isCorrect?green+"30":red+"30")}},
+          e("div",{style:{fontSize:14,fontWeight:700,color:isCorrect?green:red,marginBottom:6}},isCorrect?"\u2713 Correct":"\u2717 Incorrect"),
+          e("p",{style:{fontSize:14,color:g800,margin:0,lineHeight:1.6}},q.explanation)
+        ):null
+      ),
+      e("div",{style:{display:"flex",justifyContent:"flex-end",gap:12}},
+        !showExp?
+          e("button",{style:Object.assign({},btnS(true),{opacity:selOpt===null?0.5:1}),disabled:selOpt===null,onClick:function(){setAnswers(function(a){var n=Object.assign({},a);n[q.id]={selected:selOpt,correct:selOpt===q.correct};return n;});setShowExp(true);}},"Submit answer"):
+          e("button",{style:btnS(true),onClick:function(){setSelOpt(null);setShowExp(false);if(curQ<QUESTIONS.length-1)setCurQ(function(c){return c+1});else setPhase("results");}},curQ<QUESTIONS.length-1?"Next question \u2192":"View results \u2192")
+      )
+    );
+  }
+
+  if(phase==="results"){
+    var today=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+    return e("div",{style:Object.assign({},wrap,{paddingTop:32,paddingBottom:48})},
+      e("div",{ref:topRef}),
+      e("div",{style:Object.assign({},cardS,{textAlign:"center",background:passed?"#f0fdf4":"#fef2f2",border:"1px solid "+(passed?"#bbf7d0":"#fecaca")})},
+        e("div",{style:{fontSize:56,marginBottom:8}},passed?"\u2713":"\u2717"),
+        e("h2",{style:{fontSize:26,fontWeight:800,color:passed?green:red,margin:"0 0 8px"}},passed?"Training Complete":"Not Passed"),
+        e("p",{style:{fontSize:16,color:g500,margin:"0 0 20px"}},"You scored "+score+" out of "+QUESTIONS.length+" ("+pct+"%). "+(passed?"You meet the 80% pass threshold.":"You need 80% to pass. Please review the material and try again.")),
+        e("div",{style:{display:"inline-flex",gap:24,background:"#fff",borderRadius:10,padding:"14px 28px",border:"1px solid "+g200}},
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Score"),e("div",{style:{fontSize:20,fontWeight:700,color:navy}},pct+"%")),
+          e("div",{style:{width:1,background:g200}}),
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Correct"),e("div",{style:{fontSize:20,fontWeight:700,color:navy}},score+"/"+QUESTIONS.length)),
+          e("div",{style:{width:1,background:g200}}),
+          e("div",null,e("div",{style:{fontSize:12,color:g500}},"Status"),e("div",{style:{fontSize:20,fontWeight:700,color:passed?green:red}},passed?"Passed":"Failed"))
+        )
+      ),
+      !passed?e("div",{style:{textAlign:"center",marginBottom:20}},
+        e("p",{style:{fontSize:14,color:g500,marginBottom:12}},"Review the topics you missed:"),
+        e("div",{style:{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center"}},
+          QUESTIONS.filter(function(q){return answers[q.id]&&!answers[q.id].correct}).map(function(q){
+            return e("span",{key:q.id,style:{fontSize:13,padding:"6px 12px",borderRadius:6,background:red+"10",color:red,fontWeight:600}},q.section);
+          })
+        )
+      ):null,
+      e("div",{style:{marginBottom:24}},
+        e("h3",{style:{fontSize:16,fontWeight:700,color:navy,marginBottom:14}},"Answer review"),
+        QUESTIONS.map(function(q,i){
+          var a=answers[q.id];var correct=a&&a.correct;
+          return e("div",{key:q.id,style:{display:"flex",gap:12,padding:"12px 16px",borderRadius:8,marginBottom:6,background:correct?green+"08":red+"08",border:"1px solid "+(correct?green+"20":red+"20"),alignItems:"flex-start"}},
+            e("span",{style:{minWidth:24,height:24,borderRadius:24,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,background:correct?green:red,color:"#fff"}},correct?"\u2713":"\u2717"),
+            e("div",{style:{flex:1}},
+              e("div",{style:{fontSize:13,fontWeight:600,color:navy,marginBottom:2}},"Q"+(i+1)+". "+q.scenario.slice(0,80)+"..."),
+              e("div",{style:{fontSize:12,color:g500}},correct?"Correct":"Your answer: "+String.fromCharCode(65+a.selected)+" \u2014 Correct: "+String.fromCharCode(65+q.correct))
+            )
+          );
+        })
+      ),
+      passed?e("div",{style:Object.assign({},cardS,{textAlign:"center",border:"2px solid "+navy,background:"#fff",padding:"40px 32px"})},
+        e("div",{style:{fontSize:11,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:accent,marginBottom:16}},"Certificate of completion"),
+        e("h2",{style:{fontSize:24,fontWeight:800,color:navy,margin:"0 0 4px"}},"Anti-Discrimination & DEIB Training"),
+        e("p",{style:{fontSize:14,color:g500,margin:"0 0 24px"}},"This certifies that"),
+        e("p",{style:{fontSize:22,fontWeight:700,color:navy,margin:"0 0 4px",fontStyle:"italic"}},name),
+        e("p",{style:{fontSize:14,color:g500,margin:"0 0 24px"}},"has successfully completed the Anti-Discrimination & DEIB training assessment on "+today+", achieving a score of "+pct+"%."),
+        e("div",{style:{width:60,height:1,background:g200,margin:"0 auto 16px"}}),
+        e("p",{style:{fontSize:12,color:g500,margin:0}},"This record should be filed with the HR team.")
+      ):null,
+      passed?e("div",{style:{display:"flex",justifyContent:"center",gap:12,marginTop:16}},
+        e("button",{style:Object.assign({},btnS(true),{background:navy}),onClick:function(){
+          var subject=encodeURIComponent("DEIB Training Complete \u2014 "+name);
+          var body=encodeURIComponent("ANTI-DISCRIMINATION & DEIB TRAINING RESULTS\n\nEmployee: "+name+"\nDate: "+today+"\nScore: "+score+"/"+QUESTIONS.length+" ("+pct+"%)\nStatus: PASSED\n\nDetailed Results:\n"+QUESTIONS.map(function(q,i){var a=answers[q.id];return "Q"+(i+1)+". "+q.section+" \u2014 "+(a&&a.correct?"Correct":"Incorrect (answered "+String.fromCharCode(65+a.selected)+", correct "+String.fromCharCode(65+q.correct)+")");}).join("\n")+"\n\nThis employee has successfully completed the Anti-Discrimination & DEIB training assessment.\n\nPlease file this record accordingly.");
+          window.open("mailto:hr@dibs42.com?subject="+subject+"&body="+body);
+        }},"\u2709 Send results to HR")
+      ):null,
+      !passed?e("div",{style:{display:"flex",justifyContent:"center",gap:12,marginTop:8}},
+        e("button",{style:btnS(true),onClick:function(){setPhase("training");setCurSec(0);setCurQ(0);setAnswers({});setSelOpt(null);setShowExp(false);}},"\u2190 Retake training")
+      ):null
+    );
+  }
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+</script>
+</body>
+</html>
